@@ -58,6 +58,30 @@ class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable {
 	}
 
 	/**
+	 * Get the array key, or the default value if the key does not exist
+	 * The key can be a string or an integer (negative or positive) negative integers are used to get the key from the end of the array
+	 * 
+	 * @param int|string $key The key to get
+	 * @param mixed $default The default value to return if the key does not exist
+	 * 
+	 * @return mixed The value of the key or the default value
+	 */
+	public function get( $key, $default = null ) {
+		if ( ! is_string( $key ) && ! is_int( $key ) ) return $default;
+		
+		// Only for negative indexes
+		if ( is_int( $key ) && $key < 0 ) {
+			$key   = absint( $key ) - 1;
+			$array = array_reverse( $this->array );
+			$array = array_values( $array );
+
+			return $array[ $key ] ?? $default;
+		}
+
+		return $this->offsetExists( $key ) ? $this->offsetGet( $key ) : $default;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function __toString() {
