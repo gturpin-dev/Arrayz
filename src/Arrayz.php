@@ -6,7 +6,7 @@ namespace Gturpin\Arrayz;
  * Class Arrayz - A simple array manipulation class
  * @package Gturpin\Arrayz
  */
-class Arrayz implements \Countable {
+class Arrayz implements \IteratorAggregate, \Countable {
 // class Arrayz implements \Stringable {
 // class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable, \Serializable, \ArrayAccess, \Stringable {
 
@@ -53,20 +53,29 @@ class Arrayz implements \Countable {
 	 *
 	 * @return array
 	 */
-	public function get_array() {
+	public function to_array() {
 		return $this->array;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function __toString() {
 		return '<pre>' . print_r( $this->array, true ) . '</pre>';
 	}
 
 	/**
-	 * Count the number of elements in the array
-	 *
-	 * @return int
+	 * @see https://www.php.net/manual/en/countable.count.php
 	 */
 	public function count(): int {
 		return count( $this->array );
+	}
+
+	/**
+	 * @see https://www.php.net/manual/en/iteratoraggregate.getiterator.php
+	 * @see https://www.php.net/manual/en/class.arrayiterator.php
+	 */
+	public function getIterator(): \ArrayIterator {
+		return new \ArrayIterator( $this->array );
 	}
 }
