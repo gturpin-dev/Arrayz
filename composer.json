@@ -1,0 +1,19 @@
+{
+    "name": "gturpin/arrayz",
+    "description": "Helper class to manipulate arrays",
+	"type": "library",
+	"require": {
+		"php": ">=7.4"
+	},
+    "autoload": {
+        "psr-4": {
+            "Gturpin\\Arrayz\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "gturpin-dev",
+            "email": "guillaume.turpin45@gmail.com"
+        }
+    ]
+}
