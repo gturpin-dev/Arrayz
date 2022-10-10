@@ -6,7 +6,7 @@ namespace Gturpin\Arrayz;
  * Class Arrayz - A simple array manipulation class
  * @package Gturpin\Arrayz
  */
-class Arrayz implements \IteratorAggregate, \Countable {
+class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable {
 // class Arrayz implements \Stringable {
 // class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable, \Serializable, \ArrayAccess, \Stringable {
 
@@ -77,5 +77,41 @@ class Arrayz implements \IteratorAggregate, \Countable {
 	 */
 	public function getIterator(): \ArrayIterator {
 		return new \ArrayIterator( $this->array );
+	}
+
+	/**
+	 * @see https://www.php.net/manual/en/arrayaccess.offsetexists.php
+	 */
+	public function offsetExists( $offset ): bool {
+		return isset( $this->array[ $offset ] );
+	}
+
+	/**
+	 * @see https://www.php.net/manual/en/arrayaccess.offsetget.php
+	 */
+	public function offsetGet( $offset ) {
+		if ( $this->offsetExists( $offset ) ) {
+			return $this->array[ $offset ];
+		}
+		
+		return null;
+	}
+
+	/**
+	 * @see https://www.php.net/manual/en/arrayaccess.offsetset.php
+	 */
+	public function offsetSet( $offset, $value ): void {
+		if ( is_null( $offset ) ) {
+			$this->array[] = $value;
+		} else {
+			$this->array[ $offset ] = $value;
+		}
+	}
+
+	/**
+	 * @see https://www.php.net/manual/en/arrayaccess.offsetunset.php
+	 */
+	public function offsetUnset( $offset ): void {
+		unset( $this->array[ $offset ] );
 	}
 }
