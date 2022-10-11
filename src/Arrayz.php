@@ -7,28 +7,6 @@ namespace Gturpin\Arrayz;
  * @package Gturpin\Arrayz
  */
 class Arrayz extends \ArrayObject implements \ArrayAccess, \IteratorAggregate, \Countable, \Serializable {
-// class Arrayz implements \Stringable {
-// class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable, \Serializable, \ArrayAccess, \Stringable {
-
-	protected $data = [];
-	
-	/**
-	 * The array to be manipulated
-	 *
-	 * @var array
-	 */
-	protected array $array;
-	
-	/**
-	 * @param mixed|array $array The array to model or the value to wrap
-	 */
-	// public function __construct( $array = [] ) {
-	// 	$this->array = is_array( $array ) ? $array : [ $array ];
-	// 	parent::__construct( $this->array );
-
-	// 	// echo '<pre>' . print_r( $this->data, true ) . '</pre>';
-	// 	// die;
-	// }
 
 	/**
 	 * Dump the array
@@ -38,7 +16,7 @@ class Arrayz extends \ArrayObject implements \ArrayAccess, \IteratorAggregate, \
 	 * @return void
 	 */
 	public function dump( bool $die = false ) {
-		echo '<pre>' . print_r( $this->array, true ) . '</pre>';
+		echo '<pre>' . print_r( $this->getArrayCopy(), true ) . '</pre>';
 
 		if ( $die ) {
 			die;
@@ -56,11 +34,12 @@ class Arrayz extends \ArrayObject implements \ArrayAccess, \IteratorAggregate, \
 
 	/**
 	 * Get the array
+	 * Alias for getArrayCopy()
 	 *
 	 * @return array
 	 */
 	public function to_array() {
-		return $this->array;
+		return $this->getArrayCopy();
 	}
 
 	/**
@@ -74,12 +53,11 @@ class Arrayz extends \ArrayObject implements \ArrayAccess, \IteratorAggregate, \
 	 */
 	public function get( $key, $default = null ) {
 		if ( ! is_string( $key ) && ! is_int( $key ) ) return $default;
-		
+
 		// Only for negative indexes
 		if ( is_int( $key ) && $key < 0 ) {
 			$key   = absint( $key ) - 1;
-			// $array = array_reverse( $this->getArrayCopy() );
-			$array = array_reverse( $this->array );
+			$array = array_reverse( $this->getArrayCopy() );
 			$array = array_values( $array );
 
 			return $array[ $key ] ?? $default;
@@ -92,30 +70,7 @@ class Arrayz extends \ArrayObject implements \ArrayAccess, \IteratorAggregate, \
 	 * @return string
 	 */
 	public function __toString() {
-		return '<pre>' . print_r( $this->data, true ) . '</pre>';
-		return '<pre>' . print_r( $this->array, true ) . '</pre>';
-	}
-
-	// /**
-	//  * @see https://www.php.net/manual/en/countable.count.php
-	//  */
-	// public function count(): int {
-	// 	return count( $this->array );
-	// }
-
-	/**
-	 * @see https://www.php.net/manual/en/iteratoraggregate.getiterator.php
-	 * @see https://www.php.net/manual/en/class.arrayiterator.php
-	 */
-	public function getIterator(): \ArrayIterator {
-		return new \ArrayIterator( $this->array );
-	}
-
-	/**
-	 * @see https://www.php.net/manual/en/arrayaccess.offsetexists.php
-	 */
-	public function offsetExists( $offset ): bool {
-		return isset( $this->array[ $offset ] );
+		return '<pre>' . print_r( $this->getArrayCopy(), true ) . '</pre>';
 	}
 
 	/**
@@ -123,27 +78,9 @@ class Arrayz extends \ArrayObject implements \ArrayAccess, \IteratorAggregate, \
 	 */
 	public function offsetGet( $offset ) {
 		if ( $this->offsetExists( $offset ) ) {
-			return $this->array[ $offset ];
+			return $this->getArrayCopy()[ $offset ];
 		}
 		
 		return null;
-	}
-
-	/**
-	 * @see https://www.php.net/manual/en/arrayaccess.offsetset.php
-	 */
-	public function offsetSet( $offset, $value ): void {
-		if ( is_null( $offset ) ) {
-			$this->array[] = $value;
-		} else {
-			$this->array[ $offset ] = $value;
-		}
-	}
-
-	/**
-	 * @see https://www.php.net/manual/en/arrayaccess.offsetunset.php
-	 */
-	public function offsetUnset( $offset ): void {
-		unset( $this->array[ $offset ] );
 	}
 }
