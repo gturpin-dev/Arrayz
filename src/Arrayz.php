@@ -6,10 +6,12 @@ namespace Gturpin\Arrayz;
  * Class Arrayz - A simple array manipulation class
  * @package Gturpin\Arrayz
  */
-class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable {
+class Arrayz extends \ArrayObject implements \ArrayAccess, \IteratorAggregate, \Countable, \Serializable {
 // class Arrayz implements \Stringable {
 // class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable, \JsonSerializable, \Serializable, \ArrayAccess, \Stringable {
 
+	protected $data = [];
+	
 	/**
 	 * The array to be manipulated
 	 *
@@ -20,9 +22,13 @@ class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable {
 	/**
 	 * @param mixed|array $array The array to model or the value to wrap
 	 */
-	public function __construct( array $array = [] ) {
-		$this->array = is_array( $array ) ? $array : [ $array ];
-	}
+	// public function __construct( $array = [] ) {
+	// 	$this->array = is_array( $array ) ? $array : [ $array ];
+	// 	parent::__construct( $this->array );
+
+	// 	// echo '<pre>' . print_r( $this->data, true ) . '</pre>';
+	// 	// die;
+	// }
 
 	/**
 	 * Dump the array
@@ -72,6 +78,7 @@ class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable {
 		// Only for negative indexes
 		if ( is_int( $key ) && $key < 0 ) {
 			$key   = absint( $key ) - 1;
+			// $array = array_reverse( $this->getArrayCopy() );
 			$array = array_reverse( $this->array );
 			$array = array_values( $array );
 
@@ -85,15 +92,16 @@ class Arrayz implements \ArrayAccess, \IteratorAggregate, \Countable {
 	 * @return string
 	 */
 	public function __toString() {
+		return '<pre>' . print_r( $this->data, true ) . '</pre>';
 		return '<pre>' . print_r( $this->array, true ) . '</pre>';
 	}
 
-	/**
-	 * @see https://www.php.net/manual/en/countable.count.php
-	 */
-	public function count(): int {
-		return count( $this->array );
-	}
+	// /**
+	//  * @see https://www.php.net/manual/en/countable.count.php
+	//  */
+	// public function count(): int {
+	// 	return count( $this->array );
+	// }
 
 	/**
 	 * @see https://www.php.net/manual/en/iteratoraggregate.getiterator.php
