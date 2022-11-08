@@ -56,7 +56,7 @@ class Arrayz extends \ArrayObject implements \ArrayAccess, \IteratorAggregate, \
 
 		// Only for negative indexes
 		if ( is_int( $key ) && $key < 0 ) {
-			$key   = absint( $key ) - 1;
+			$key   = abs( $key ) - 1;
 			$array = array_reverse( $this->getArrayCopy() );
 			$array = array_values( $array );
 
